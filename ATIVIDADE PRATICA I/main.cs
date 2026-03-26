@@ -41,130 +41,160 @@ class Exercicio
 			switch (opcao)
 			{
 				case 1:
-					Console.WriteLine("\nInforme o nome do exercício: ");
-					nome.Add(Console.ReadLine());
-					
-					Console.WriteLine("\nInforme o grupo muscular desse exercício: ");
-					grupoMuscular.Add(Console.ReadLine());
-					
-					Console.WriteLine("\nInforme a carga em kg: ");
-					while (true) {
-
-						if (float.TryParse(Console.ReadLine(), out valorCarga) && valorCarga >= 0) {
-							carga.Add(valorCarga);
-							break;
-						}
-						else {
-							Console.WriteLine("\nCarga inválida. Informe uma valor numérico e maior que 0.");	
-						}
-					}
-					
-					while (true) {
-						Console.WriteLine("\nInforme a quantidade de repetições");
-						if (int.TryParse(Console.ReadLine(), out qtdReps) && qtdReps >= 1) {
-							reps.Add(qtdReps);
-							break;
-						}
-						else {
-							Console.WriteLine("\nQuant. de repetições inválida. Informe um valor numérico e maior/igual a 1.");
-						}
-					}
-					
+					AdicionarExercicio(nome, grupoMuscular, carga, reps, valorCarga, qtdReps);
 				break;
 				
 				case 2:
-					Console.WriteLine("\nLISTA DE EXERCÍCIOS REGISTRADOS: ");
-					for (int i = 0; i < nome.Count; i++) 
-					{
-						Console.WriteLine("Nome: "+ nome[i] +" - Grupo Muscular: "+ grupoMuscular[i] +" - Carga: "+ carga[i] +"kg - Repetições: "+ reps[i]);
-					}
-					
+					ListarExercicios(nome, grupoMuscular, carga, reps);
 				break;
 					
 				case 3:
-					Console.WriteLine("\nNome do exercício que deseja buscar: ");
-					resp = Console.ReadLine();
-					
-					var resultadoBuscaNome = from i in Enumerable.Range(0, nome.Count)
-										 where nome[i].ToLower() == resp.ToLower()
-										 select i;
-					
-					bool encontrado = false;
-					
-					foreach (int i in resultadoBuscaNome) 
-					{
-						Console.WriteLine("\nNome: "+ nome[i] +" - Grupo Muscular: "+ grupoMuscular[i] +" - Carga: "+ carga[i] +"kg - Repetições: "+reps[i]);
-						encontrado = true;
-					}
-					
-					if (!encontrado) {
-						Console.WriteLine("\nExercício não encontrado.");	
-					}
-					
+					BuscarExercicio(nome, grupoMuscular, carga, reps, resp);
 				break;
 					
 				case 4:
-					Console.WriteLine("\nFiltrar exercícios por grupo musuclar: ");
-					resp = Console.ReadLine();
-					
-					var resultadoFiltroGrupo = from i in Enumerable.Range(0, grupoMuscular.Count)
-										  where grupoMuscular[i].ToLower() == resp.ToLower()
-										  select i;
-					encontrado = false;
-						
-					foreach (int i in resultadoFiltroGrupo) 
-					{
-						Console.WriteLine("\nNome: "+ nome[i] +" - Grupo Muscular: "+ grupoMuscular[i] +" - Carga: "+ carga[i] +"kg - Repetições: "+ reps[i]);
-						encontrado = true;
-					}
-					
-					if (!encontrado) {
-						Console.WriteLine("\nGrupo muscular não encontrado.");	
-					}
+					FiltrarGrupo(nome, grupoMuscular, carga, reps, resp);
 				break;
 					
 				case 5:
-					float cargaTotal = 0;
-					
-					cargaTotal = carga.Sum();
-					Console.WriteLine("\nCarga total de um treino: " + cargaTotal + "kg.");
-
+					CalcularCargaTotal(carga);
 				break;
 					
 				case 6:
-					Console.WriteLine("\nExercício mais pesado: ");
-					Console.WriteLine("Nome: "+ nome[carga.IndexOf(carga.Max())] +"- Carga: "+ carga[carga.IndexOf(carga.Max())]);
+					ExibirMaisPesado(nome, carga);
 				break;
 					
 				case 7:
-					Console.WriteLine("\nInforme o nome do exercício a ser removido: ");
-					resp = Console.ReadLine();
-					
-					int indiceRemover = -1;
-
-					for (int i = 0; i < nome.Count; i++)
-					{
-						if (nome[i].ToLower() == resp.ToLower())
-						{
-							indiceRemover = i;
-							break;
-						}
-					}
-					if (indiceRemover != -1) {
-						nome.RemoveAt(indiceRemover);
-						grupoMuscular.RemoveAt(indiceRemover);
-						carga.RemoveAt(indiceRemover);
-						reps.RemoveAt(indiceRemover);
-
-						Console.WriteLine("Exercício removido.");
-					}
-					else
-					{
-						Console.WriteLine("Exercício não encontrado.");
-					}
-					
+					RemoverExercicio(nome, grupoMuscular, carga, reps, resp);
 				break;
 			}
+		}
+	}
+	
+	static void AdicionarExercicio(List<String> nome, List<String> grupoMuscular, List<float> carga, List<int> reps, float valorCarga, int qtdReps)
+	{
+		Console.WriteLine("\nInforme o nome do exercício: ");
+		nome.Add(Console.ReadLine());
+					
+		Console.WriteLine("\nInforme o grupo muscular desse exercício: ");
+		grupoMuscular.Add(Console.ReadLine());
+					
+		Console.WriteLine("\nInforme a carga em kg: ");
+		while (true) {
+
+			if (float.TryParse(Console.ReadLine(), out valorCarga) && valorCarga >= 0) {
+				carga.Add(valorCarga);
+				break;
+			}
+			else {
+				Console.WriteLine("\nCarga inválida. Informe uma valor numérico e maior que 0.");	
+			}
+		}
+					
+		while (true) {
+			Console.WriteLine("\nInforme a quantidade de repetições");
+			if (int.TryParse(Console.ReadLine(), out qtdReps) && qtdReps >= 1) {
+				reps.Add(qtdReps);
+				break;
+			}
+			else {
+				Console.WriteLine("\nQuant. de repetições inválida. Informe um valor numérico e maior/igual a 1.");
+			}
+		}
+	}
+	
+	static void ListarExercicios(List<String> nome, List<String> grupoMuscular, List<float> carga, List<int> reps)
+	{
+		Console.WriteLine("\nLISTA DE EXERCÍCIOS REGISTRADOS: ");
+		for (int i = 0; i < nome.Count; i++) 
+		{
+			Console.WriteLine("Nome: "+ nome[i] +" - Grupo Muscular: "+ grupoMuscular[i] +" - Carga: "+ carga[i] +"kg - Repetições: "+ reps[i]);
+		}
+	}
+	
+	static void BuscarExercicio(List<String> nome, List<String> grupoMuscular, List<float> carga, List<int> reps, String resp)
+	{
+		Console.WriteLine("\nNome do exercício que deseja buscar: ");
+		resp = Console.ReadLine();
+					
+		var resultadoBuscaNome = from i in Enumerable.Range(0, nome.Count)
+								 where nome[i].ToLower() == resp.ToLower()
+								 select i;
+					
+		bool encontrado = false;
+					
+		foreach (int i in resultadoBuscaNome) 
+		{
+			Console.WriteLine("\nNome: "+ nome[i] +" - Grupo Muscular: "+ grupoMuscular[i] +" - Carga: "+ carga[i] +"kg - Repetições: "+reps[i]);
+			encontrado = true;
+		}
+					
+		if (!encontrado) {
+			Console.WriteLine("\nExercício não encontrado.");	
+		}
+	}
+	
+	static void FiltrarGrupo(List<String> nome, List<String> grupoMuscular, List<float> carga, List<int> reps, String resp)
+	{
+		Console.WriteLine("\nFiltrar exercícios por grupo musuclar: ");
+		resp = Console.ReadLine();
+					
+		var resultadoFiltroGrupo = from i in Enumerable.Range(0, grupoMuscular.Count)
+							  where grupoMuscular[i].ToLower() == resp.ToLower()
+							  select i;
+		bool encontrado = false;
+						
+		foreach (int i in resultadoFiltroGrupo) 
+		{
+			Console.WriteLine("\nNome: "+ nome[i] +" - Grupo Muscular: "+ grupoMuscular[i] +" - Carga: "+ carga[i] +"kg - Repetições: "+ reps[i]);
+			encontrado = true;
+		}
+					
+		if (!encontrado) {
+			Console.WriteLine("\nGrupo muscular não encontrado.");	
+		}
+	}
+	
+	static void CalcularCargaTotal(List<float> carga)
+	{
+		float cargaTotal = 0;
+					
+		cargaTotal = carga.Sum();
+		Console.WriteLine("\nCarga total de um treino: " + cargaTotal + "kg.");
+	}
+	
+	static void ExibirMaisPesado(List<String> nome, List<float> carga)
+	{
+		Console.WriteLine("\nExercício mais pesado: ");
+		Console.WriteLine("Nome: "+ nome[carga.IndexOf(carga.Max())] +"- Carga: "+ carga[carga.IndexOf(carga.Max())]);
+	}
+	
+	static void RemoverExercicio(List<String> nome, List<String> grupoMuscular, List<float> carga, List<int> reps, String resp)
+	{
+		Console.WriteLine("\nInforme o nome do exercício a ser removido: ");
+		resp = Console.ReadLine();
+					
+		int indiceRemover = -1;
+
+		for (int i = 0; i < nome.Count; i++)
+		{
+			if (nome[i].ToLower() == resp.ToLower())
+			{
+				indiceRemover = i;
+				break;
+			}
+		}
+		if (indiceRemover != -1) {
+			nome.RemoveAt(indiceRemover);
+			grupoMuscular.RemoveAt(indiceRemover);
+			carga.RemoveAt(indiceRemover);
+			reps.RemoveAt(indiceRemover);
+
+			Console.WriteLine("Exercício removido.");
+		}
+		else
+		{
+			Console.WriteLine("Exercício não encontrado.");
 		}
 	}
 }
